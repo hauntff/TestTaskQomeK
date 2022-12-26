@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repository
 {
-    public class PostRepository : GenericRepository<Post>, IPostRepository
+    public class BlogRepository : GenericRepository<Blog>, IBlogRepository
     {
-        public PostRepository(HabrDbContext context) : base(context) { }
-        public async Task<List<Post>> GetPostsAsync()
+        public BlogRepository(HabrDbContext context) : base(context) { }
+        public async Task<List<Blog>> GetPostsAsync()
         {
             var dbContext = (HabrDbContext)context;
             var posts = await dbContext.Posts.ToListAsync();

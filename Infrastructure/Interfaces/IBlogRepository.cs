@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Interfaces
 {
-    public interface IPostRepository : IGenericRepository<Post>
+    public interface IBlogRepository : IGenericRepository<Blog>
     {
     }
 }

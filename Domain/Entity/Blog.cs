@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class Post
+    public class Blog
     {
         public int Id { get; set; }
         public string Header { get; set; }

@@ -1,14 +1,10 @@
 ﻿using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Data
+namespace BlogApi.Data
 {
-    public class HabrDbContext : DbContext
+    public class BlogDbContext : DbContext
     {
         public DbSet<Blog> Posts { get; set; }
         public DbSet<User> Users { get; set; }
