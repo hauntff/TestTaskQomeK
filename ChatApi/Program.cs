@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ChatHub>();
 builder.Services.AddSwaggerGen(options => { options.SwaggerDoc("v1", new OpenApiInfo { Title = "ChatApi", Version = "v1" }); });
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(e => { e.EnableDetailedErrors = true; });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,8 +24,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
+app.MapHub<ChatHub>("/chatHub");    
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); endpoints.MapHub<ChatHub>("/chatHub"); });
 app.MapControllers();
-app.MapHub<ChatHub>("/chatHub");
 app.Run();
