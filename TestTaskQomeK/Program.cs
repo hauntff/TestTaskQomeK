@@ -5,8 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR(e=> { e.EnableDetailedErrors = true; });
-
 builder.Services.AddTransient<ChatApi.Hubs.ChatHub>();
+builder.Services.AddTransient<AuthApi.Controllers.WeatherForecastController>();
+builder.Services.AddTransient<WeatherApi.Controllers.WeatherForecastController>();
+builder.Services.AddAuthentication().AddJwtBearer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatApi", "ChatApi\ChatApi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogApi", "BlogApi\BlogApi.csproj", "{11A04052-CFD1-49BA-B8CB-17B32346BCBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi", "WeatherApi\WeatherApi.csproj", "{E91E1D8B-E00A-45DD-9FC7-6563D0280219}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthApi", "AuthApi\AuthApi.csproj", "{E61F805B-5053-49CC-BAB1-CB655FDB1157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{11A04052-CFD1-49BA-B8CB-17B32346BCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11A04052-CFD1-49BA-B8CB-17B32346BCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11A04052-CFD1-49BA-B8CB-17B32346BCBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E91E1D8B-E00A-45DD-9FC7-6563D0280219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E91E1D8B-E00A-45DD-9FC7-6563D0280219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E91E1D8B-E00A-45DD-9FC7-6563D0280219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E91E1D8B-E00A-45DD-9FC7-6563D0280219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61F805B-5053-49CC-BAB1-CB655FDB1157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61F805B-5053-49CC-BAB1-CB655FDB1157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61F805B-5053-49CC-BAB1-CB655FDB1157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61F805B-5053-49CC-BAB1-CB655FDB1157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

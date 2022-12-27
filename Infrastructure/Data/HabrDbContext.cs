@@ -12,7 +12,6 @@ namespace Infrastructure.Data
     {
         public DbSet<Blog> Posts { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserPassword> UserPasswords { get; set; }
         public HabrDbContext(DbContextOptions<HabrDbContext> options) : base(options) { }
         public HabrDbContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

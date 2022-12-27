@@ -8,7 +8,6 @@ namespace BlogApi.Data
     {
         public DbSet<Blog> Posts { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserPassword> UserPasswords { get; set; }
         public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }
         public BlogDbContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
