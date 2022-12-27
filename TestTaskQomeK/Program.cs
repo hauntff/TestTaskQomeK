@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR(e=> { e.EnableDetailedErrors = true; });
 builder.Services.AddTransient<ChatApi.Hubs.ChatHub>();
-builder.Services.AddTransient<AuthApi.Controllers.WeatherForecastController>();
+builder.Services.AddTransient<AuthApi.Controllers.AuthController>();
 builder.Services.AddTransient<WeatherApi.Controllers.WeatherForecastController>();
 builder.Services.AddAuthentication().AddJwtBearer();
 var app = builder.Build();
