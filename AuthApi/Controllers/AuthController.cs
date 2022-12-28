@@ -1,7 +1,6 @@
 ﻿using AuthApi.DTO;
 using AuthApi.Interfaces;
 using Domain.Entity;
-using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,16 +17,24 @@ namespace AuthApi.Controllers
         public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authservice;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(IConfiguration configuration, IAuthService authService)
+
+        public AuthController(IConfiguration configuration, IAuthService authService, IUserRepository userRepository)
         { 
             _configuration = configuration;
             _authservice = authService;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
+            User users =  _userRepository.FindUserFromDb(request.Username);
+            if (users != null)
+            {
+                return BadRequest("a user with the given name already exists in the system");
+            }
             _authservice.Register(request);
             return Ok("all is ok");
         }

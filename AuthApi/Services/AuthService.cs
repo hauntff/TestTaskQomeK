@@ -24,6 +24,7 @@ namespace AuthApi.Services
 
         public async Task<ActionResult<User>> Register(UserDto request)
         {
+            
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.UserName = request.Username;
@@ -40,15 +41,17 @@ namespace AuthApi.Services
         }
         public async Task<ActionResult<string>> LogIn(UserDto request)
         {
-            if (user.UserName != request.Username)
+            User users = _userRepository.FindUserFromDb(request.Username);
+            if (users == null)
             {
                 return "UserNotFound";
             }
-            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            
+            if (!VerifyPasswordHash(request.Password, users.PasswordHash, users.PasswordSalt))
             {
                 return "wrong password";
             }
-            var token = CreateToken(user);
+            var token = CreateToken(users);
             return token;
         }
 
