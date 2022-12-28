@@ -2,6 +2,8 @@
 using AuthApi.Interfaces;
 using Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace TestTaskQomeK.Controllers
 {
@@ -9,10 +11,12 @@ namespace TestTaskQomeK.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IUserRepository _userRepository;
-        public AuthorizeController(IAuthService authService, IUserRepository userRepository)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public AuthorizeController(IAuthService authService, IUserRepository userRepository, IHttpClientFactory httpClientFactory)
         {
             _authService = authService;
             _userRepository = userRepository;
+            _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
@@ -31,13 +35,18 @@ namespace TestTaskQomeK.Controllers
             _authService.Register(user);
             return RedirectToAction("Index","Home");
         }
-		public JsonResult LogIn(string username, string password)
+		public async Task<RedirectResult> LogIn(UserDto user)
 		{
-			UserDto user = new UserDto();
-			user.Username = username;
-			user.Password = password;
-			var answer =_authService.LogIn(user);
-			return Json(answer.Result.Value);
+
+            var users = _userRepository.FindUserFromDb(user.Username);
+			var answer = await _authService.LogIn(user);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true
+            };
+            Response.Cookies.Append("Authorization", answer.Value, cookieOptions);
+            _authService.CreateClaim(users);
+			return Json(answer.Value);
 		}
 	}
 }

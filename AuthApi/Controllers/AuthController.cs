@@ -1,6 +1,7 @@
 ﻿using AuthApi.DTO;
 using AuthApi.Interfaces;
 using Domain.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,14 +19,23 @@ namespace AuthApi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authservice;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public AuthController(IConfiguration configuration, IAuthService authService, IUserRepository userRepository)
+        public AuthController(IConfiguration configuration, IAuthService authService, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         { 
             _configuration = configuration;
             _authservice = authService;
             _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        [HttpGet, Authorize]
+        public ActionResult<string> GetMe()
+        {
+            var username = _authservice.GetMyName();
+            return Ok(username);
+        }
+
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)

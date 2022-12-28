@@ -3,14 +3,31 @@ using AuthApi.Data;
 using AuthApi.Interfaces;
 using AuthApi.Repos;
 using AuthApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+	options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+	{
+		Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.ApiKey
+	});
+	options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
 var connStr = builder.Configuration.GetConnectionString("LocalConnectionString");
 if (string.IsNullOrWhiteSpace(connStr))
     throw new ArgumentNullException(connStr);
@@ -21,7 +38,19 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 });
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services
+	.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options => {
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+			.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+			ValidateIssuer = false,
+			ValidateAudience = false
+		};
+	});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,7 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

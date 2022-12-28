@@ -1,6 +1,8 @@
 ﻿using AuthApi.DTO;
 using AuthApi.Interfaces;
 using Domain.Entity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,12 +16,23 @@ namespace AuthApi.Services
         public static User user = new User();
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public AuthService(IConfiguration configuration, IUserRepository userRepository)
+        public AuthService(IConfiguration configuration, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string GetMyName()
+        {
+            var result = string.Empty;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                result = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            }
+            return result;  
         }
 
         public async Task<ActionResult<User>> Register(UserDto request)
@@ -55,11 +68,26 @@ namespace AuthApi.Services
             return token;
         }
 
+        public ClaimsIdentity CreateClaim(User user)
+        {
+			List<Claim> claims = new List<Claim>
+			{
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Role, "Admin"),
+				new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+
+			};
+			ClaimsIdentity claimsIdentity = new(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            return claimsIdentity;
+		}
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                
             };
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value));

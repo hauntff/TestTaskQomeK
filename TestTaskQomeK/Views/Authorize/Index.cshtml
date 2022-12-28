@@ -197,6 +197,7 @@ $("#login").click(function() {
 			$.ajax({
 				url: '/Authorize/LogIn?username=' + username + '&password=' + password,
 				type: "POST",
+				
 				success: function(data)
 				{
 					console.log(data)
