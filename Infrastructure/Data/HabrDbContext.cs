@@ -10,8 +10,9 @@ namespace Infrastructure.Data
 {
     public class HabrDbContext : DbContext
     {
-        public DbSet<Blog> Posts { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CommentSpr> CommentSprs { get; set; }
         public HabrDbContext(DbContextOptions<HabrDbContext> options) : base(options) { }
         public HabrDbContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -35,7 +35,7 @@ namespace TestTaskQomeK.Controllers
             _authService.Register(user);
             return RedirectToAction("Index","Home");
         }
-		public async Task<RedirectResult> LogIn(UserDto user)
+		public async Task<JsonResult> LogIn(UserDto user)
 		{
 
             var users = _userRepository.FindUserFromDb(user.Username);

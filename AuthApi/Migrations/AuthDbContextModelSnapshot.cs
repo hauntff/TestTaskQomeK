@@ -38,7 +38,7 @@ namespace AuthApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Posts");
+                    b.ToTable("UserDtos");
                 });
 
             modelBuilder.Entity("Domain.Entity.User", b =>

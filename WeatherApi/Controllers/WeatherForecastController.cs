@@ -1,35 +1,41 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using MongoDB.Driver;
+using WeatherApi.Interfaces;
+using WeatherApi.Models;
+using WeatherApi.WeatherService;
 namespace WeatherApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+		private readonly IForecastRepository _forecastRepository;
+		private readonly IWeatherService _weatherService;
+		public WeatherForecastController(IForecastRepository forecastRepository, IWeatherService weatherService)
+		{
+			_forecastRepository = forecastRepository;
+			_weatherService = weatherService;
+		}
 
-        private readonly ILogger<WeatherForecastController> _logger;
+		[HttpGet("getWeather")]
+		public async Task<City> City(string city)
+		{
+			// Consume the OpenWeatherAPI in order to bring Forecast data in our page.
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
-    }
+			var root = await _forecastRepository.GetForecast(city);
+			City cityWeather = new City();
+			if (root != null)
+			{
+				cityWeather.Name = root.name;
+				cityWeather.Humidity = root.main.humidity;
+				cityWeather.Pressure = root.main.pressure;
+				cityWeather.Temp = root.main.temp;
+				cityWeather.Weather = root.weather[0].main;
+				cityWeather.Wind = root.wind.speed;
+			}
+			await _weatherService.CreateAsync(cityWeather);
+			return cityWeather;
+		}
+	}
 }

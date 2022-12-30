@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthApi.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20221227113022_Farabi-AddTable")]
-    partial class FarabiAddTable
+    [Migration("20221230041946_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,7 @@ namespace AuthApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Posts");
+                    b.ToTable("UserDtos");
                 });
 
             modelBuilder.Entity("Domain.Entity.User", b =>

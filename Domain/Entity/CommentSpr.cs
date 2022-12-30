@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class Blog
-    {
+	public class CommentSpr
+	{
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
-        public string Header { get; set; } = string.Empty;
-        public string Body { get; set; } = string.Empty;
-        public string Author { get; set; } = string.Empty;
-        public List<CommentSpr>? CommentSpr { get; set; }
-    }
+		public string Username { get; set; } = string.Empty;
+		public string Comment { get; set; } = string.Empty;
+		public int BlogId { get; set;}
+	}
 }

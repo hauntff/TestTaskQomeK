@@ -13,12 +13,5 @@ namespace Infrastructure.Repository
     public class BlogRepository : GenericRepository<Blog>, IBlogRepository
     {
         public BlogRepository(HabrDbContext context) : base(context) { }
-        public async Task<List<Blog>> GetPostsAsync()
-        {
-            var dbContext = (HabrDbContext)context;
-            var posts = await dbContext.Posts.ToListAsync();
-            return posts;
-        }
-
-    }
+     }
 }

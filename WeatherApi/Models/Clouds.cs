@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entity
+namespace WeatherApi.Models
 {
-    public class Chat
+    public class Clouds
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int all { get; set; }
     }
 }

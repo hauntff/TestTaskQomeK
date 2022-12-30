@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthApi.Migrations
 {
     /// <inheritdoc />
-    public partial class FarabiAddTable : Migration
+    public partial class second : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Posts",
+                name: "UserDtos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -22,7 +22,7 @@ namespace AuthApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.Id);
+                    table.PrimaryKey("PK_UserDtos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,7 +46,7 @@ namespace AuthApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "UserDtos");
 
             migrationBuilder.DropTable(
                 name: "Users");
