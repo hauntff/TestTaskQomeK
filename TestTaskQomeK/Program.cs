@@ -15,30 +15,11 @@ builder.Services.AddSignalR(e=> { e.EnableDetailedErrors = true; });
 var connStr = builder.Configuration.GetConnectionString("LocalConnectionString");
 if (string.IsNullOrWhiteSpace(connStr))
 	throw new ArgumentNullException(connStr);
-builder.Services.AddDbContext<AuthDbContext>(options =>
-{
-	options.UseNpgsql(connStr);
-	options.EnableSensitiveDataLogging();
-});
+
 builder.Services.AddTransient<ChatHub>();
-builder.Services.AddHttpClient<AuthApi.Controllers.AuthController>();
-builder.Services.AddTransient<WeatherApi.Controllers.WeatherForecastController>();
-builder.Services.AddTransient<AuthApi.Interfaces.IAuthService, AuthService>();
-builder.Services.AddTransient<AuthApi.Interfaces.IUserRepository, UserRepository>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddControllersWithViews();
-builder.Services
-	.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-	.AddJwtBearer(options => {
-		options.TokenValidationParameters = new TokenValidationParameters
-		{
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-			.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-			ValidateIssuer = false,
-			ValidateAudience = false
-		};
-	});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,5 +38,5 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints => { endpoints.MapHub<ChatHub>("/chatHub"); });
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authorize}/{action=Index}");
+    pattern: "{controller=Chat}/{action=Index}");
 app.Run();
